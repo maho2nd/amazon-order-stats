@@ -89,10 +89,12 @@ function parsePage(yearIndex, year, rootElement, orderData){
     
     var priceTotal = parseFloat(sPriceTotal.replace("EUR ","").replace(",","."))
 
-    orderData.push({
-      "order_date": sDate,
-      "total"     : priceTotal
-    });
+    if(orderDetailElements.length == 3){
+      orderData.push({
+        "order_date": sDate,
+        "total"     : priceTotal
+      });
+    }
   });
 
   var nextPageElement = rootElement.querySelector("li.a-last a");
@@ -124,7 +126,7 @@ function printStats(year, orderData){
     total += order.total;
   });
 
-  console.log("Year " + year + " total:"  + total + "; orders: " + orderData.length);  
+  console.log("Year " + year + " total:"  + Math.round(total) + "; orders: " + orderData.length);  
 }
 
 
