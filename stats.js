@@ -88,14 +88,22 @@ function parsePage(yearIndex, year, rootElement, orderData){
 
     var sDate       = orderDetailElements[0].textContent.trim();
     var sPriceTotal = orderDetailElements[1].textContent.trim();
-    
     var priceTotal = parseFloat(sPriceTotal.replace("EUR ","").replace(",","."))
+    var originalPriceTotal = 0;
+
+    orderElement.querySelectorAll(".a-color-price").forEach(e => {
+      var origPrice = parseFloat(e.textContent.trim().replace("EUR ","").replace(",","."));
+      if(origPrice) {
+        originalPriceTotal += origPrice;
+      }
+    });
 
     if(orderDetailElements.length == 3){
       orderData.push({
-        "order_date": sDate,
-        "total"     : priceTotal,
-        "returned"  : returned 
+        "order_date"     : sDate,
+        "total"          : priceTotal,
+        "original_total" : originalPriceTotal,
+        "returned"       : returned 
       });
     }
   });
@@ -127,16 +135,18 @@ function parsePage(yearIndex, year, rootElement, orderData){
 function printStats(year, orderData){
   var total = 0;
   var totalReturned = 0;
+  var originalTotal = 0;
   
   orderData.forEach(order =>{
     if(order.returned){
       totalReturned += order.total;
     }else{
       total += order.total;
+      originalTotal += order.original_total;
     }
   });
 
-  console.log("Year " + year + " total:"  + Math.round(total) + "; orders: " + orderData.length + "; returned: " + totalReturned);  
+  console.log("Year " + year + " total:"  + Math.round(total) + "; original total: " + Math.round(originalTotal) + "; orders: " + orderData.length + "; returned: " + Math.round(totalReturned));  
 }
 
 
