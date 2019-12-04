@@ -118,6 +118,8 @@ function parsePage(yearIndex, year, rootElement, orderData){
 
     if((yearIndex+1) < yearOptionValues.length){
       fetchYear(yearIndex+1); 
+    }else{
+      console.log("Finished");
     }
   }
 }
@@ -136,5 +138,6 @@ function printStats(year, orderData){
 
   console.log("Year " + year + " total:"  + Math.round(total) + "; orders: " + orderData.length + "; returned: " + totalReturned);  
 }
+
 
 fetchYear(0);
