@@ -84,6 +84,8 @@ function parsePage(yearIndex, year, rootElement, orderData){
   rootElement.querySelectorAll(".a-box-group").forEach(orderElement => {
     var orderDetailElements = orderElement.querySelectorAll(".a-color-secondary.value");
 
+    var returned = orderElement.textContent.includes("Rücksendung abgeschlossen");
+
     var sDate       = orderDetailElements[0].textContent.trim();
     var sPriceTotal = orderDetailElements[1].textContent.trim();
     
@@ -92,7 +94,8 @@ function parsePage(yearIndex, year, rootElement, orderData){
     if(orderDetailElements.length == 3){
       orderData.push({
         "order_date": sDate,
-        "total"     : priceTotal
+        "total"     : priceTotal,
+        "returned"  : returned 
       });
     }
   });
@@ -121,13 +124,17 @@ function parsePage(yearIndex, year, rootElement, orderData){
 
 function printStats(year, orderData){
   var total = 0;
+  var totalReturned = 0;
   
   orderData.forEach(order =>{
-    total += order.total;
+    if(order.returned){
+      totalReturned += order.total;
+    }else{
+      total += order.total;
+    }
   });
 
-  console.log("Year " + year + " total:"  + Math.round(total) + "; orders: " + orderData.length);  
+  console.log("Year " + year + " total:"  + Math.round(total) + "; orders: " + orderData.length + "; returned: " + totalReturned);  
 }
-
 
 fetchYear(0);
